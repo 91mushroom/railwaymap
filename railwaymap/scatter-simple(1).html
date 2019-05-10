@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <!--<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>-->
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    title : {
+        text: '历年GDP与火车平均速度（1999-2018）',
+    },
+    tooltip : {
+        trigger: 'axis',
+        showDelay : 0,
+        formatter : function (params) {
+            if (params.value.length > 1) {
+                return params.seriesName + ' :<br/>'
+                   + params.value[0] + '千亿元' 
+                   + params.value[1] + 'km/h '
+                + params.value[2] + '时间 ';
+            }
+            else {
+                return params.seriesName + ' :<br/>'
+                   + params.value + 'km/h ';
+            }
+        },  
+        axisPointer:{
+            show: true,
+            type : 'cross',
+            lineStyle: {
+                type : 'dashed',
+                width : 1
+            }
+        }
+    },
+
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataZoom : {show: true},
+            dataView : {show: true, readOnly: false},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    xAxis : [
+        {
+            type : 'value',
+            scale:true,
+            axisLabel : {
+                formatter: '{value} 千亿元'
+            }
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            scale:true,
+            axisLabel : {
+                formatter: '{value} km/h'
+            }
+        }
+    ],
+    series : [
+        {
+      		name:'里程、客运量、年份',
+            type:'scatter',
+            data: [
+                   [89.67,76,1999], [99.21,80,2000], [109.65,85.3,2001], [120.33,88,2002], 
+                   [135.8,90.7,2003], [159.8,109.3,2004], [183.08,112.3,2005], [211.92,115,2006],
+                   [249.53,119,2007], [300.67,130.1,2008],[340.507,132.8,2009], [397.980,136,2010], 
+                   [471.564,139.6,2011], [519.32,149.6,2012], [568.8,157.6,2013], [636.5,159,2014],
+                   [677.6,171,2015], [744.12,180.3,2016], [827.12,188.3,2017], [903.33,189.3,2018]
+            ],
+ markPoint : {
+                data : [
+                    {type : 'max', name: '最大值'},
+                    {type : 'min', name: '最小值'}
+                ]
+            },
+           /*markLine : {
+                data : [
+                    {type : 'average', name: '平均值'}
+                ]
+            } */ 
+        }, 
+    ]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

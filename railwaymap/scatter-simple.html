@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <!--<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=xfhhaTThl11qYVrqLZii6w8qE5ggnhrY&__ec_v__=20190126"></script>-->
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+option = {
+    title : {
+        text: '铁路运营里程与客运量',
+    },
+    tooltip : {
+        trigger: 'axis',
+        showDelay : 0,
+        formatter : function (params) {
+            if (params.value.length > 1) {
+                return params.seriesName + ' :<br/>'
+                   + params.value[0] + 'w公里' 
+                   + params.value[1] + '亿人 '
+                + params.value[2] + '时间 ';
+            }
+            else {
+                return params.seriesName + ' :<br/>'
+                   + params.value + '亿人 ';
+            }
+        },  
+        axisPointer:{
+            show: true,
+            type : 'cross',
+            lineStyle: {
+                type : 'dashed',
+                width : 1
+            }
+        }
+    },
+
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataZoom : {show: true},
+            dataView : {show: true, readOnly: false},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    xAxis : [
+        {
+            type : 'value',
+            scale:true,
+            axisLabel : {
+                formatter: '{value} w公里'
+            }
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            scale:true,
+            axisLabel : {
+                formatter: '{value} 亿人'
+            }
+        }
+    ],
+    series : [
+        {
+      		name:'里程、客运量、年份',
+            type:'scatter',
+            data: [[6.24,10.3,1995], [6.49,9.5,1996], [6.6,9.3,1997], [6.64,9.5,1998],
+                   [6.74,10,1999], [6.87,10.5,2000], [7.01,10.5,2001], [7.19,10.6,2002], 
+                   [7.3,9.7,2003], [7.44,11.2,2004], [7.54,11.6,2005], [7.71,7.8,2006],
+                   [7.8,13.6,2007], [7.97,14.6,2008],[8.55,15.2,2009], [9.12,16.8,2010], 
+                   [9.32,18.6,2011], [9.76,18.9,2012], [10.32,21.1,2013], [11.2,23.6,2014],
+                   [12.1,25.3,2015], [12.4,28.1,2016], [12.7,30.8,2017], [13.1,33.7,2018]
+            ],
+ markPoint : {
+                data : [
+                    {type : 'max', name: '最大值'},
+                    {type : 'min', name: '最小值'}
+                ]
+            },
+           /*markLine : {
+                data : [
+                    {type : 'average', name: '平均值'}
+                ]
+            } */ 
+        }, 
+    ]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

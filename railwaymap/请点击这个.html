@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>飞驰四十年——中国铁路网巨变</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<!-- css -->
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="simple-line-icons/css/simple-line-icons.css">
+<link href="css/fancybox/jquery.fancybox.css" rel="stylesheet"> 
+<link href="css/flexslider.css" rel="stylesheet" />
+<link href="js/owl-carousel/owl.carousel.css" rel="stylesheet"> 
+<link href="css/style.css" rel="stylesheet" /> 
+	<script src="http://www.dituyi.com.cn/static/lib/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://www.dituyi.com.cn/static/lib/bootstrap-3.3.5/css/bootstrap.min.css">
+    <script src="http://www.dituyi.com.cn/static/lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+    <!--引入需要的js和css-->
+    <link rel="stylesheet" href="http://www.dituyi.com.cn/wmap/wmap.css">
+    <script src="http://www.dituyi.com.cn/wmap/wmap.js"></script>
+    <script src="http://www.dituyi.com.cn/wmap/config.js"></script>
+	<script src="http://www.dituyi.com.cn/wmap/plugins/grade.js"></script>
+	<style>
+		html, body {
+			width:100%;
+			height:100%;
+		}
+		.panel {
+			margin-bottom: 0px;
+		}
+		.panel-body {
+			padding: 8px;
+		}
+		#mapDiv {
+			height: calc(100vh - 18px);
+		}
+	</style>
+	<script>
+        var map;
+        $(document).ready(function(){
+                initMap();
+        });
+        function initMap(){
+            //创建地图对象
+            map = W.map("mapDiv");
+            //创建一个底图，并添加到map中
+            var tileServiceUrl  ="http://api.dituyi.com.cn/TileService/defaultService";
+            var key = "00dbb09bcc25439787a9e46cdf82aa6e";
+            var baseLayer = W.mspTileLayer(tileServiceUrl,{key:key}).addTo(map);
+            //设置地图显示的中心点和级别
+            map.setView([37.98, 104.33], 4);
+            var lengeds = [
+                 {
+                     from : 0,
+                     to : 20,
+                     lable : '0 -- 20',
+                     color : '#FFEDA0'
+                 },
+                 {
+                     from : 20,
+                     to : 40,
+                     lable : '20 -- 40',
+                     color : '#FED976'
+                 },
+                 {
+                     from : 40,
+                     to : 60,
+                     lable : '40 -- 60',
+                     color : '#FEB24C'
+                 },
+                 {
+                     from : 60,
+                     to : 80,
+                     lable : '80 -- 100',
+                     color : '#FD8D3C'
+                 },
+                 {
+                     from : 100,
+                     to : 120,
+                     lable : '100 -- 120',
+                     color : '#FC4E2A'
+                 },
+                 {
+                     from : 120,
+                     to : 140,
+                     lable : '120 -- 140',
+                     color : '#E31A1C'
+                 },
+                 {
+                     from : 140,
+                     to : 160,
+                     lable : '140 -- 160',
+                     color : '#BD0026'
+                 },
+                 {
+                     from : 160,
+                     to : 180,
+                     lable : '160 -- 180',
+                     color : '#800026'
+                 }];
+             var lengedOptions = {
+                 title : '图例属性',
+                 lengeds : lengeds,
+                 callback : {
+                     click : function(data, status){
+                         //console.log(status);
+                         //console.log(data);
+                     }
+                 }
+             };
+             $.getJSON("http://www.dituyi.com.cn/examples/province_s_pg.json", function(data){
+                 //为测试数据增加值域
+                 for(var i = 0; i < data.features.length; i++){
+                     var feature = data.features[i];
+                     //像feature插入 测试数据
+                     switch(i){
+                        case 11:case 13:case 3:
+                            feature.properties['val'] = 20;
+                        break;
+                        case 9:case 25:
+                            feature.properties['val'] = 40;
+                        break;
+                        case 30:case 24:case 16:case 26:
+                            feature.properties['val'] = 60;
+                        break;
+                        case 14:case 19:case 10:case 20:case 18:case 2:case 8:
+                            feature.properties['val'] = 80;
+                        break;
+                        case 34:case 21:case 22:case 31:case 29:case 27:
+                            feature.properties['val'] = 100;
+                        break;
+                        case 15:
+                            feature.properties['val'] = 120;
+                        break;
+                        case 32:case 1:case 17:
+                            feature.properties['val'] = 140;
+                        break;
+                        case 33:case 7:
+                            feature.properties['val'] = 160;
+                        break;
+                        default:
+                            feature.properties['val'] = 0;
+                        break;
+                     }
+                     //feature.properties['val'] = Math.random() * 70;//值字段
+                 }
+                 gradeLayer = W.grade(data,{
+                     lengedOptions: lengedOptions,
+                     valueFiled: 'val',//值字段
+                     infoParse: function(data){
+                         var html = "信息窗内容";
+                         html += "<table style='font-size: 12px;background-color: white'>";
+                         for(var key in data){
+                             html += "<tr><td>" + key + "</td><td>" + data[key] + "</td></tr>";
+                         }
+                         html += "</table>";
+                         return html;
+                     }
+                 });
+                 map.addLayer(gradeLayer);
+             });
+        }
+
+	</script>
+ 
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div id="wrapper" class="home-page">
+	<!-- start header 
+	<header>
+        <div class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="logo"/></a>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="index.html">Home</a></li> 
+							 <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">About Us <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="about.html">Company</a></li>
+                            <li><a href="#">Our Team</a></li>
+                            <li><a href="#">News</a></li> 
+                            <li><a href="#">Investors</a></li>
+                        </ul>
+                    </li>
+						<li><a href="services.html">Services</a></li> 
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+	</header>-->
+    <div style="font-size: 50px;text-align: center">飞驰四十年——中国铁路网巨变</div>
+
+    <div style="height: 70px"></div>
+    <div style="font-size: 25px;text-align: center">改革开放四十年以来，中国铁路网日益完善，</div><div style="font-size: 25px;text-align: center">铁路运营装备和基础设施不断升级。</div><div style="font-size: 25px;text-align: center">从时速几十公里的绿皮车，到时速350公里的高铁，</div><div style="font-size: 25px;text-align: center">从主要铁路线的修建到开通，全国铁路运营里程和客运量逐年攀升，</div><div style="font-size: 25px;text-align: center">到拉动各大城市乃至全国经济的快速发展。</div><div style="font-size: 25px;text-align: center">为帮助人们更加形象地感知中国铁路翻天覆地的变化，我们搜集了大量铁路相关数据......</div>
+    <div style="height: 150px"></div>
+
+
+
+	<!-- end header -->
+	<section >
+	<!-- Slider -->
+        <div  style="font-size: 20px;text-align: center">2008年至2018年中国高铁运营线路变化图</div>
+        <div
+            align="center">
+            <img src="./1.gif" style="width:800px; height:600px;" ></src>
+			
+        </div>
+		<div  style="font-size: 20px;text-align: center">近十年铁路数目增长量区域等级图（增长量越大颜色越深）</div>
+		<div class="panel panel-default" align="center">
+		      <div class="panel-body">
+			  <div id="mapDiv"  style="width:800px; height:600px;">
+			</div>
+		</div>
+    </div>
+		
+	<!-- end slider -->
+ 
+	</section>
+    <div style="height: 150px"></div>
+	<section><div  style="font-size: 20px;text-align: center">铁路相关数据变化图</div>
+  <div  align="center" style="background:#FFFFE0">
+		<iframe style="width:800px; height:600px;" src="./scatter-simple.html"></iframe>
+	 </div>
+    <div  align="center" style="background:#FFFFE0">
+        <iframe style="width:800px; height:600px;" src="./scatter-simple(1).html"></iframe>
+     </div>
+	</section>
+	
+	<div style="height: 150px"></div>
+	<section id="content"><div  style="font-size: 20px;text-align: center">关于改革开放四十年铁路变化的报道热词</div>
+	  <div  align="center">
+		<iframe style="width:1920px; height:800px;" src="./p_files/p.html"></iframe>
+	 </div>
+
+	</section> 
+		
+
+	
+	
+</div>
+<a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
+
+</body>
+</html>

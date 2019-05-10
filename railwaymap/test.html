@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>梯度图</title>
+
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="http://www.dituyi.com.cn/static/lib/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://www.dituyi.com.cn/static/lib/bootstrap-3.3.5/css/bootstrap.min.css">
+    <script src="http://www.dituyi.com.cn/static/lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+    <!--引入需要的js和css-->
+    <link rel="stylesheet" href="http://www.dituyi.com.cn/wmap/wmap.css">
+    <script src="http://www.dituyi.com.cn/wmap/wmap.js"></script>
+    <script src="http://www.dituyi.com.cn/wmap/config.js"></script>
+	<script src="http://www.dituyi.com.cn/wmap/plugins/grade.js"></script>
+	<style>
+		html, body {
+			width:100%;
+			height:100%;
+		}
+		.panel {
+			margin-bottom: 0px;
+		}
+		.panel-body {
+			padding: 8px;
+		}
+		#mapDiv {
+			height: calc(100vh - 18px);
+		}
+	</style>
+	<script>
+        var map;
+        $(document).ready(function(){
+                initMap();
+        });
+        function initMap(){
+            //创建地图对象
+            map = W.map("mapDiv");
+            //创建一个底图，并添加到map中
+            var tileServiceUrl  ="http://api.dituyi.com.cn/TileService/defaultService";
+            var key = "00dbb09bcc25439787a9e46cdf82aa6e";
+            var baseLayer = W.mspTileLayer(tileServiceUrl,{key:key}).addTo(map);
+            //设置地图显示的中心点和级别
+            map.setView([37.98, 104.33], 4);
+            var lengeds = [
+                 {
+                     from : 0,
+                     to : 20,
+                     lable : '0 -- 20',
+                     color : '#FFEDA0'
+                 },
+                 {
+                     from : 20,
+                     to : 40,
+                     lable : '20 -- 40',
+                     color : '#FED976'
+                 },
+                 {
+                     from : 40,
+                     to : 60,
+                     lable : '40 -- 60',
+                     color : '#FEB24C'
+                 },
+                 {
+                     from : 60,
+                     to : 80,
+                     lable : '80 -- 100',
+                     color : '#FD8D3C'
+                 },
+                 {
+                     from : 100,
+                     to : 120,
+                     lable : '100 -- 120',
+                     color : '#FC4E2A'
+                 },
+                 {
+                     from : 120,
+                     to : 140,
+                     lable : '120 -- 140',
+                     color : '#E31A1C'
+                 },
+                 {
+                     from : 140,
+                     to : 160,
+                     lable : '140 -- 160',
+                     color : '#BD0026'
+                 },
+                 {
+                     from : 160,
+                     to : 180,
+                     lable : '160 -- 180',
+                     color : '#800026'
+                 }];
+             var lengedOptions = {
+                 title : '图例属性',
+                 lengeds : lengeds,
+                 callback : {
+                     click : function(data, status){
+                         //console.log(status);
+                         //console.log(data);
+                     }
+                 }
+             };
+             $.getJSON("http://www.dituyi.com.cn/examples/province_s_pg.json", function(data){
+                 //为测试数据增加值域
+                 for(var i = 0; i < data.features.length; i++){
+                     var feature = data.features[i];
+                     //像feature插入 测试数据
+                     switch(i){
+                        case 11:case 13:case 3:
+                            feature.properties['val'] = 20;
+                        break;
+                        case 9:case 25:
+                            feature.properties['val'] = 40;
+                        break;
+                        case 30:case 24:case 16:case 26:
+                            feature.properties['val'] = 60;
+                        break;
+                        case 14:case 19:case 10:case 20:case 18:case 2:case 8:
+                            feature.properties['val'] = 80;
+                        break;
+                        case 34:case 21:case 22:case 31:case 29:case 27:
+                            feature.properties['val'] = 100;
+                        break;
+                        case 15:
+                            feature.properties['val'] = 120;
+                        break;
+                        case 32:case 1:case 17:
+                            feature.properties['val'] = 140;
+                        break;
+                        case 33:case 7:
+                            feature.properties['val'] = 160;
+                        break;
+                        default:
+                            feature.properties['val'] = 0;
+                        break;
+                     }
+                     //feature.properties['val'] = Math.random() * 70;//值字段
+                 }
+                 gradeLayer = W.grade(data,{
+                     lengedOptions: lengedOptions,
+                     valueFiled: 'val',//值字段
+                     infoParse: function(data){
+                         var html = "信息窗内容";
+                         html += "<table style='font-size: 12px;background-color: white'>";
+                         for(var key in data){
+                             html += "<tr><td>" + key + "</td><td>" + data[key] + "</td></tr>";
+                         }
+                         html += "</table>";
+                         return html;
+                     }
+                 });
+                 map.addLayer(gradeLayer);
+             });
+        }
+
+	</script>
+</head>
+<body>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div id="mapDiv">
+			</div>
+		</div>
+    </div>
+</body>
+</html>
